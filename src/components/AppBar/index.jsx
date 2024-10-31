@@ -13,7 +13,7 @@ function AppBar() {
                 backgroundColor: 'primary.main'
             }}
         >
-            <ModeSelect></ModeSelect>
+            <ModeSelect />
         </Box>
     )
 }
