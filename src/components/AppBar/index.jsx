@@ -39,7 +39,11 @@ function AppBar() {
                         color: 'primary.main'
                     }}
                 >
-                    <SvgIcon component={TrelloIcon} inheritViewBox />
+                    <SvgIcon
+                        component={TrelloIcon}
+                        fontSize="small"
+                        inheritViewBox
+                    />
                     <Typography sx={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
                         Trello
                     </Typography>
@@ -59,13 +63,18 @@ function AppBar() {
                     size="small"
                 />
                 <ModeSelect />
+
                 <Tooltip title="Notification">
                     <Badge color="error" variant="dot">
-                        <NotificationsNoneIcon />
+                        <NotificationsNoneIcon
+                            sx={{ cursor: 'pointer', color: 'primary.main' }}
+                        />
                     </Badge>
                 </Tooltip>
                 <Tooltip title="Help">
-                    <HelpOutlineIcon />
+                    <HelpOutlineIcon
+                        sx={{ cursor: 'pointer', color: 'primary.main' }}
+                    />
                 </Tooltip>
                 <Profiles />
             </Box>

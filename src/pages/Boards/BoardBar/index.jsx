@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material'
 import Box from '@mui/material/Box'
 
 function BoardBar() {
@@ -11,7 +12,7 @@ function BoardBar() {
                 backgroundColor: 'primary.light'
             }}
         >
-            Board Bar
+            <p style={{ fontSize: '1rem' }}>h1. Heading</p>
         </Box>
     )
 }
