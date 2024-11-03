@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Box from '@mui/material/Box'
 import Menu from '@mui/material/Menu'
 import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
@@ -23,8 +24,9 @@ function Workspaces() {
     }
 
     return (
-        <div>
+        <Box>
             <Button
+                sx={{ color: '#ffffff' }}
                 id="basic-button-workspaces"
                 aria-controls={open ? 'basic-menu-workspaces' : undefined}
                 aria-haspopup="true"
@@ -78,7 +80,7 @@ function Workspaces() {
                     <ListItemText>Web Clipboard</ListItemText>
                 </MenuItem>
             </Menu>
-        </div>
+        </Box>
     )
 }
 
