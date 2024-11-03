@@ -34,7 +34,7 @@ function Profiles() {
                     <Avatar
                         src="https://scontent.fsgn2-7.fna.fbcdn.net/v/t1.6435-9/123772445_2682345688692316_5804252625951566209_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=bd9a62&_nc_ohc=L8AbOFovDuIQ7kNvgGFPuDV&_nc_zt=23&_nc_ht=scontent.fsgn2-7.fna&_nc_gid=ArevpR97mjw3R3Ena0urckc&oh=00_AYByZ9HAgX_n61g9GTCYf_4YbQp78ALlLpDgtb_1kuhC9g&oe=674C505C"
                         alt="Sasori"
-                        sx={{ width: 30, height: 30 }}
+                        sx={{ width: 36, height: 36 }}
                     />
                 </IconButton>
             </Tooltip>

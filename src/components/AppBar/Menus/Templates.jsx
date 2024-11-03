@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Box from '@mui/material/Box'
 import Menu from '@mui/material/Menu'
 import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
@@ -19,8 +20,9 @@ function Templates() {
     }
 
     return (
-        <div>
+        <Box>
             <Button
+                sx={{ color: '#ffffff' }}
                 id="basic-button-templates"
                 aria-controls={open ? 'basic-menu-templates' : undefined}
                 aria-haspopup="true"
@@ -66,7 +68,7 @@ function Templates() {
                     <ListItemText>Custom spacing...</ListItemText>
                 </MenuItem>
             </Menu>
-        </div>
+        </Box>
     )
 }
 

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Box from '@mui/material/Box'
 import Menu from '@mui/material/Menu'
 import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
@@ -19,8 +20,9 @@ function Recent() {
     }
 
     return (
-        <div>
+        <Box>
             <Button
+                sx={{ color: '#ffffff' }}
                 id="basic-button-recent"
                 aria-controls={open ? 'basic-menu-recent' : undefined}
                 aria-haspopup="true"
@@ -66,7 +68,7 @@ function Recent() {
                     <ListItemText>Custom spacing...</ListItemText>
                 </MenuItem>
             </Menu>
-        </div>
+        </Box>
     )
 }
 

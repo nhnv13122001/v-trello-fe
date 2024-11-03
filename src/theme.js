@@ -1,4 +1,3 @@
-import { blue, lightBlue } from '@mui/material/colors'
 import { experimental_extendTheme as extendTheme } from '@mui/material/styles'
 
 const theme = extendTheme({
@@ -8,16 +7,10 @@ const theme = extendTheme({
     },
     colorSchemes: {
         light: {
-            palette: {
-                primary: lightBlue
-            }
+            palette: {}
         },
         dark: {
-            palette: {
-                // primary: {
-                //     main: '#000'
-                // }
-            }
+            palette: {}
         }
     },
     components: {
@@ -25,15 +18,14 @@ const theme = extendTheme({
             styleOverrides: {
                 body: {
                     '*::-webkit-scrollbar': {
-                        width: '8px',
-                        height: '8px'
+                        width: '6px',
+                        height: '6px'
                     },
                     '*::-webkit-scrollbar-thumb': {
-                        background: '#bdc3c7',
-                        borderRadius: '3px'
+                        background: '#dcdde1'
                     },
                     '*::-webkit-scrollbar-thumb:hover': {
-                        background: '#74b9ff'
+                        background: '#ffffff'
                     }
                 }
             }
@@ -41,35 +33,31 @@ const theme = extendTheme({
         MuiButton: {
             styleOverrides: {
                 root: {
-                    textTransform: 'none'
+                    textTransform: 'none',
+                    borderWidth: '1px',
+                    '&:hover': {
+                        borderWidth: '1px'
+                    }
                 }
             }
         },
         MuiInputLabel: {
             styleOverrides: {
-                root: ({ theme }) => ({
-                    color: theme.palette.primary.main,
+                root: {
                     fontSize: '0.875rem'
-                })
+                }
             }
         },
         MuiOutlinedInput: {
             styleOverrides: {
-                root: ({ theme }) => ({
-                    color: theme.palette.primary.main,
-                    fontSize: '0.875rem',
-                    '& .MuiOutlinedInput-notchedOutline': {
-                        borderColor: theme.palette.primary.light
-                    },
-                    '&:hover ': {
-                        '.MuiOutlinedInput-notchedOutline': {
-                            borderColor: theme.palette.primary.main
-                        }
-                    },
+                root: {
                     '& fieldset': {
-                        borderWidth: '1px !important'
+                        borderWidth: '1px'
+                    },
+                    '&:hover fieldset, &.Mui-focused fieldset': {
+                        borderWidth: '2px'
                     }
-                })
+                }
             }
         }
     }

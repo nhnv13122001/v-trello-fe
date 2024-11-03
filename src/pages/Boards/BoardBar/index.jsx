@@ -12,13 +12,12 @@ import AddToDriveIcon from '@mui/icons-material/AddToDrive'
 import FilterListIcon from '@mui/icons-material/FilterList'
 
 const MENU_STYLES = {
-    px: '5px',
-    border: 'none',
+    paddingX: '5px',
     borderRadius: '4px',
-    color: 'primary.main',
-    backgroundColor: 'white',
+    color: '#ffffff',
+    backgroundColor: 'transparent',
     '& .MuiSvgIcon-root': {
-        color: 'primary.main'
+        color: '#ffffff'
     },
     '&:hover': {
         backgroundColor: 'primary.50'
@@ -33,11 +32,13 @@ function BoardBar() {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 gap: 2,
-                px: 2,
+                paddingX: 2,
                 width: '100%',
                 height: (theme) => theme.trello.appBarHeight,
                 overflowX: 'auto',
-                borderTop: '1px solid #00bfa5'
+                borderBottom: '1px solid #ffffff',
+                backgroundColor: (theme) =>
+                    theme.palette.mode === 'dark' ? '#34495e' : '#1976d2'
             }}
         >
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -73,7 +74,18 @@ function BoardBar() {
                 />
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                <Button variant="outlined" startIcon={<PersonAddIcon />}>
+                <Button
+                    variant="outlined"
+                    startIcon={<PersonAddIcon />}
+                    sx={{
+                        color: '#ffffff',
+                        borderColor: '#ffffff',
+                        '&:hover ': {
+                            borderColor: '#ffffff',
+                            opacity: '0.8'
+                        }
+                    }}
+                >
                     Invite
                 </Button>
                 <AvatarGroup
@@ -82,7 +94,12 @@ function BoardBar() {
                         '& .MuiAvatar-root': {
                             width: '34px',
                             height: '34px',
-                            fontSize: '16px'
+                            fontSize: '16px',
+                            border: '1px solid #cccccc',
+                            transition: 'all 0.3s ease'
+                        },
+                        '&:hover .MuiAvatar-root': {
+                            marginRight: '10px'
                         }
                     }}
                 >
