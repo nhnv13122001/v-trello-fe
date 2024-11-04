@@ -11,6 +11,8 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd'
 import AddToDriveIcon from '@mui/icons-material/AddToDrive'
 import FilterListIcon from '@mui/icons-material/FilterList'
 
+import { capitalizeFirstLetter } from '~/utils/formatter'
+
 const MENU_STYLES = {
   paddingX: '5px',
   borderRadius: '4px',
@@ -24,7 +26,7 @@ const MENU_STYLES = {
   }
 }
 
-function BoardBar() {
+function BoardBar({ board }) {
   return (
     <Box
       sx={{
@@ -44,13 +46,13 @@ function BoardBar() {
         <Chip
           sx={MENU_STYLES}
           icon={<DashboardIcon />}
-          label='MERN Stack Board'
+          label={board?.title}
           clickable
         />
         <Chip
           sx={MENU_STYLES}
           icon={<VpnLockIcon />}
-          label='Public/Private Workspace'
+          label={capitalizeFirstLetter(board?.type)}
           clickable
         />
         <Chip
