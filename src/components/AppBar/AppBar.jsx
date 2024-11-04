@@ -2,7 +2,6 @@ import { useState } from 'react'
 import Box from '@mui/material/Box'
 import Recent from './Menus/Recent'
 import Starred from './Menus/Starred'
-import ModeSelect from '../ModeSelect'
 import Profiles from './Menus/Profiles'
 import Badge from '@mui/material/Badge'
 import Templates from './Menus/Templates'
@@ -20,6 +19,7 @@ import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 
+import ModeSelect from '../ModeSelect/ModeSelect'
 import { ReactComponent as TrelloIcon } from '~/assets/trello.svg'
 
 function AppBar() {
