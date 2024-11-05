@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import Box from '@mui/material/Box'
 import Menu from '@mui/material/Menu'
+import { CSS } from '@dnd-kit/utilities'
 import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
 import Tooltip from '@mui/material/Tooltip'
 import Cloud from '@mui/icons-material/Cloud'
 import MenuItem from '@mui/material/MenuItem'
+import { useSortable } from '@dnd-kit/sortable'
 import Typography from '@mui/material/Typography'
 import AddCardIcon from '@mui/icons-material/AddCard'
 import ListItemIcon from '@mui/material/ListItemIcon'
@@ -21,6 +23,16 @@ import { mapOrder } from '~/utils/sort'
 import ListCards from './ListCards/ListCards'
 
 function Column({ column }) {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: column._id, data: { ...column } })
+  const dndKitColumnStyle = {
+    touchAction: 'none',
+    // Nếu sử dụng CSS.Transform như docs sẽ lỗi kiểu stretch
+    // https://github.com/clauderic/dnd-kit/issues/117
+    transform: CSS.Translate.toString(transform),
+    transition
+  }
+
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   const handleClick = (event) => {
@@ -33,6 +45,10 @@ function Column({ column }) {
   const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
   return (
     <Box
+      ref={setNodeRef}
+      style={dndKitColumnStyle}
+      {...attributes}
+      {...listeners}
       sx={{
         minWidth: '300px',
         maxWidth: '300px',
