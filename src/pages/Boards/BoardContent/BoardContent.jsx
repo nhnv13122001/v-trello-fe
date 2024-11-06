@@ -1,6 +1,6 @@
 import { cloneDeep } from 'lodash'
 import Box from '@mui/material/Box'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { arrayMove } from '@dnd-kit/sortable'
 import {
   useSensor,
@@ -9,7 +9,9 @@ import {
   DragOverlay,
   MouseSensor,
   TouchSensor,
-  closestCorners
+  pointerWithin,
+  closestCorners,
+  getFirstCollision
 } from '@dnd-kit/core'
 
 import { mapOrder } from '~/utils/sort'
@@ -23,13 +25,6 @@ const ACTIVE_DRAG_ITEM_TYPE = {
 }
 
 function BoardContent({ board }) {
-  const [orderedColumns, setOrderedColumn] = useState([])
-  const [activeDragItemId, setActiveDragItemId] = useState(null)
-  const [activeDragItemType, setActiveDragItemType] = useState(null)
-  const [activeDragItemData, setActiveDragItemData] = useState(null)
-  const [oldColumnWhenDraggingCard, setOldColumnWhenDraggingCard] =
-    useState(null)
-
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
       distance: 1
@@ -42,6 +37,14 @@ function BoardContent({ board }) {
     }
   })
   const sensors = useSensors(mouseSensor, touchSensor)
+
+  const [orderedColumns, setOrderedColumn] = useState([])
+  const [activeDragItemId, setActiveDragItemId] = useState(null)
+  const [activeDragItemType, setActiveDragItemType] = useState(null)
+  const [activeDragItemData, setActiveDragItemData] = useState(null)
+  const [oldColumnWhenDraggingCard, setOldColumnWhenDraggingCard] =
+    useState(null)
+  const lastOverId = useRef(null)
 
   const findColumnByCardId = (cardId) => {
     return orderedColumns.find((column) =>
@@ -231,10 +234,55 @@ function BoardContent({ board }) {
     setOldColumnWhenDraggingCard(null)
   }
 
+  const collisionDetectionStrategy = useCallback(
+    (args) => {
+      if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) {
+        return closestCorners({ ...args })
+      }
+      const pointerIntersections = pointerWithin(args)
+      if (!pointerIntersections?.length) return
+
+      // Đoạn này fix bug flickering khi card nằm giữa 2 column
+      // Tuy nhiên vẫn bị flickering khi đưa card lên cao (out of column range)
+      // Chiều cao của column không phải 100vh => Đưa card lên phần Board bar và App bar vẫn sẽ bị flickering
+      // Solution: Không bắt sự kiện khi đưa column out of range
+
+      // const intersections =
+      //   pointerIntersections.length > 0
+      //     ? pointerIntersections
+      //     : rectIntersection(args)
+
+      let overId = getFirstCollision(pointerIntersections, 'id')
+
+      if (overId) {
+        const checkColumn = orderedColumns.find(
+          (column) => column._id === overId
+        )
+        if (checkColumn) {
+          overId = closestCorners({
+            ...args,
+            droppableContainers: args.droppableContainers.filter(
+              (container) =>
+                container.id !== overId &&
+                checkColumn?.cardOrderIds?.includes(container.id)
+            )
+          })[0]?.id
+        }
+
+        lastOverId.current = overId
+        return [{ id: overId }]
+      }
+
+      return lastOverId.current ? [{ id: lastOverId.current }] : []
+    },
+    [activeDragItemType, orderedColumns]
+  )
+
   return (
     <DndContext
       sensors={sensors}
-      collisionDetection={closestCorners}
+      // collisionDetection={closestCorners}
+      collisionDetection={collisionDetectionStrategy}
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
