@@ -1,7 +1,7 @@
-import { cloneDeep } from 'lodash'
 import Box from '@mui/material/Box'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { cloneDeep, isEmpty } from 'lodash'
 import { arrayMove } from '@dnd-kit/sortable'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   useSensor,
   DndContext,
@@ -17,6 +17,7 @@ import {
 import { mapOrder } from '~/utils/sort'
 import Column from './ListColumns/Column/Column'
 import ListColumns from './ListColumns/ListColumns'
+import { generatePlaceholderCard } from '~/utils/formatter'
 import Card from './ListColumns/Column/ListCards/Card/Card'
 
 const ACTIVE_DRAG_ITEM_TYPE = {
@@ -39,7 +40,7 @@ function BoardContent({ board }) {
   const sensors = useSensors(mouseSensor, touchSensor)
 
   const [orderedColumns, setOrderedColumn] = useState([])
-  const [activeDragItemId, setActiveDragItemId] = useState(null)
+  // const [activeDragItemId, setActiveDragItemId] = useState(null)
   const [activeDragItemType, setActiveDragItemType] = useState(null)
   const [activeDragItemData, setActiveDragItemData] = useState(null)
   const [oldColumnWhenDraggingCard, setOldColumnWhenDraggingCard] =
@@ -89,6 +90,11 @@ function BoardContent({ board }) {
         nextActiveColumn.cards = nextActiveColumn?.cards?.filter(
           (card) => card._id !== activeDraggingCardId
         )
+
+        if (isEmpty(nextActiveColumn?.cards)) {
+          nextActiveColumn.cards = [generatePlaceholderCard(nextActiveColumn)]
+        }
+
         nextActiveColumn.cardOrderIds = nextActiveColumn?.cards?.map(
           (card) => card._id
         )
@@ -105,6 +111,10 @@ function BoardContent({ board }) {
             columnId: nextOverColumn._id
           }
         )
+        nextOverColumn.cards = nextOverColumn.cards.filter(
+          (card) => !card.FE_PlaceholderCard
+        )
+
         nextOverColumn.cardOrderIds = nextOverColumn?.cards?.map(
           (card) => card._id
         )
@@ -119,7 +129,7 @@ function BoardContent({ board }) {
   }, [board])
 
   const handleDragStart = (event) => {
-    setActiveDragItemId(event?.active?.id)
+    // setActiveDragItemId(event?.active?.id)
     setActiveDragItemType(
       event?.active?.data?.current?.columnId
         ? ACTIVE_DRAG_ITEM_TYPE.CARD
@@ -228,7 +238,7 @@ function BoardContent({ board }) {
       })
     }
 
-    setActiveDragItemId(null)
+    // setActiveDragItemId(null)
     setActiveDragItemType(null)
     setActiveDragItemData(null)
     setOldColumnWhenDraggingCard(null)
@@ -246,7 +256,6 @@ function BoardContent({ board }) {
       // Tuy nhiên vẫn bị flickering khi đưa card lên cao (out of column range)
       // Chiều cao của column không phải 100vh => Đưa card lên phần Board bar và App bar vẫn sẽ bị flickering
       // Solution: Không bắt sự kiện khi đưa column out of range
-
       // const intersections =
       //   pointerIntersections.length > 0
       //     ? pointerIntersections

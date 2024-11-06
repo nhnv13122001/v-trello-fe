@@ -36,7 +36,8 @@ function Card({ card }) {
       sx={{
         cursor: 'pointer',
         boxShadow: '0 1px 1px #0000004d',
-        overflow: 'unset'
+        overflow: 'unset',
+        display: card?.FE_PlaceholderCard && 'none'
       }}
     >
       {card?.cover && (
