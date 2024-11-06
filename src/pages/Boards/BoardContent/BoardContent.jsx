@@ -8,7 +8,8 @@ import {
   MouseSensor,
   TouchSensor,
   useSensor,
-  useSensors
+  useSensors,
+  closestCorners
 } from '@dnd-kit/core'
 
 import { mapOrder } from '~/utils/sort'
@@ -157,6 +158,7 @@ function BoardContent({ board }) {
   return (
     <DndContext
       sensors={sensors}
+      collisionDetection={closestCorners}
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
