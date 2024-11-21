@@ -1,13 +1,16 @@
 import { useState } from 'react'
 import Box from '@mui/material/Box'
 import Menu from '@mui/material/Menu'
+import { toast } from 'react-toastify'
 import { CSS } from '@dnd-kit/utilities'
 import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
 import Tooltip from '@mui/material/Tooltip'
 import Cloud from '@mui/icons-material/Cloud'
 import MenuItem from '@mui/material/MenuItem'
+import TextField from '@mui/material/TextField'
 import { useSortable } from '@dnd-kit/sortable'
+import CloseIcon from '@mui/icons-material/Close'
 import Typography from '@mui/material/Typography'
 import AddCardIcon from '@mui/icons-material/AddCard'
 import ListItemIcon from '@mui/material/ListItemIcon'
@@ -23,6 +26,8 @@ import { mapOrder } from '~/utils/sort'
 import ListCards from './ListCards/ListCards'
 
 function Column({ column }) {
+  const [openForm, setOpenForm] = useState(false)
+  const [cardTitle, setCardTitle] = useState('')
   const {
     attributes,
     listeners,
@@ -59,8 +64,8 @@ function Column({ column }) {
           minWidth: '300px',
           maxWidth: '300px',
           height: 'fit-content',
-          maxHeight: (theme) =>
-            `calc(${theme.trello.boardContentHeight} - ${theme.spacing(5)})`,
+          // maxHeight: (theme) =>
+          //   `calc(${theme.trello.boardContentHeight} - ${theme.spacing(5)})`,
           borderRadius: '6px',
           backgroundColor: (theme) =>
             theme.palette.mode === 'dark' ? '#333643' : '#ebecf0'
@@ -150,20 +155,140 @@ function Column({ column }) {
 
         <ListCards cards={orderedCards} />
 
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            height: (theme) => theme.trello.columnFooterHeight,
-            padding: 2
-          }}
-        >
-          <Button startIcon={<AddCardIcon />}>Add new card</Button>
-          <Tooltip title='Drag to move'>
-            <DragHandleIcon sx={{ cursor: 'pointer' }} />
-          </Tooltip>
-        </Box>
+        {!openForm ? (
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: 2,
+              height: (theme) => theme.trello.columnFooterHeight
+            }}
+          >
+            <Button
+              startIcon={<AddCardIcon />}
+              onClick={() => {
+                setOpenForm(!openForm)
+              }}
+            >
+              Add new card
+            </Button>
+            <Tooltip title='Drag to move'>
+              <DragHandleIcon sx={{ cursor: 'pointer' }} />
+            </Tooltip>
+          </Box>
+        ) : (
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 1,
+              padding: 1.5,
+              marginX: 1,
+              marginBottom: 2,
+              height: 'fit-content',
+              borderRadius: '6px',
+              backgroundColor: (theme) =>
+                theme.palette.mode === 'dark' ? '#1e1e1e' : '#ffffff'
+            }}
+          >
+            <TextField
+              autoFocus
+              label='Enter card title...'
+              type='text'
+              size='small'
+              onChange={(e) => {
+                setCardTitle(e.target.value)
+              }}
+              value={cardTitle}
+              InputProps={{
+                endAdornment: (
+                  <Tooltip
+                    placement='right'
+                    title='Clear'
+                    onClick={() => {
+                      setCardTitle('')
+                    }}
+                    sx={{
+                      display: cardTitle || 'none',
+                      color: '#ffffff',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <CloseIcon fontSize='small' />
+                  </Tooltip>
+                )
+              }}
+              sx={{
+                '& label, & input, & label.Mui-focused': {
+                  color: '#ffffff'
+                },
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset, &:hover fieldset, &.Mui-focused fieldset': {
+                    borderColor: '#ffffff'
+                  }
+                }
+              }}
+            />
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'right',
+                gap: 1
+              }}
+            >
+              <Button
+                size='small'
+                variant='contained'
+                onClick={() => {
+                  if (!cardTitle) {
+                    toast.error('Please enter Card Title!', {
+                      position: 'bottom-left',
+                      theme: 'colored'
+                    })
+                  } else {
+                    console.log(cardTitle)
+                    toast.success('Add Card succesfully!', {
+                      position: 'bottom-left',
+                      theme: 'colored'
+                    })
+                    setOpenForm(!openForm)
+                    setCardTitle('')
+                  }
+                }}
+                sx={{
+                  color: '#ffffff',
+                  '&, &:hover': {
+                    boxShadow: 'none',
+                    backgroundColor: (theme) =>
+                      theme.palette.mode === 'dark' ? '#2c3e50' : '#1565c0'
+                  }
+                }}
+              >
+                Add
+              </Button>
+              <Button
+                size='small'
+                variant='contained'
+                onClick={() => {
+                  setOpenForm(!openForm)
+                  setCardTitle('')
+                }}
+                sx={{
+                  color: '#ffffff',
+                  '&, &:hover': {
+                    boxShadow: 'none',
+                    backgroundColor: (theme) =>
+                      theme.palette.mode === 'dark' ? '#c0392b' : '#e74c3c'
+                  }
+                }}
+              >
+                Cancel
+              </Button>
+            </Box>
+          </Box>
+        )}
       </Box>
     </Box>
   )
