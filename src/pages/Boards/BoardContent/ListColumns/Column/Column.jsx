@@ -64,8 +64,8 @@ function Column({ column }) {
           minWidth: '300px',
           maxWidth: '300px',
           height: 'fit-content',
-          // maxHeight: (theme) =>
-          //   `calc(${theme.trello.boardContentHeight} - ${theme.spacing(5)})`,
+          maxHeight: (theme) =>
+            `calc(${theme.trello.boardContentHeight} - ${theme.spacing(5)})`,
           borderRadius: '6px',
           backgroundColor: (theme) =>
             theme.palette.mode === 'dark' ? '#333643' : '#ebecf0'
@@ -155,102 +155,93 @@ function Column({ column }) {
 
         <ListCards cards={orderedCards} />
 
-        {!openForm ? (
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              padding: 2,
-              height: (theme) => theme.trello.columnFooterHeight
-            }}
-          >
-            <Button
-              startIcon={<AddCardIcon />}
-              onClick={() => {
-                setOpenForm(!openForm)
-              }}
-            >
-              Add new card
-            </Button>
-            <Tooltip title='Drag to move'>
-              <DragHandleIcon sx={{ cursor: 'pointer' }} />
-            </Tooltip>
-          </Box>
-        ) : (
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 1,
-              padding: 1.5,
-              marginX: 1,
-              marginBottom: 2,
-              height: 'fit-content',
-              borderRadius: '6px',
-              backgroundColor: (theme) =>
-                theme.palette.mode === 'dark' ? '#1e1e1e' : '#ffffff'
-            }}
-          >
-            <TextField
-              autoFocus
-              label='Enter card title...'
-              type='text'
-              size='small'
-              onChange={(e) => {
-                setCardTitle(e.target.value)
-              }}
-              value={cardTitle}
-              InputProps={{
-                endAdornment: (
-                  <Tooltip
-                    placement='right'
-                    title='Clear'
-                    onClick={() => {
-                      setCardTitle('')
-                    }}
-                    sx={{
-                      display: cardTitle || 'none',
-                      color: '#ffffff',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    <CloseIcon fontSize='small' />
-                  </Tooltip>
-                )
-              }}
-              sx={{
-                '& label, & input, & label.Mui-focused': {
-                  color: '#ffffff'
-                },
-                '& .MuiOutlinedInput-root': {
-                  '& fieldset, &:hover fieldset, &.Mui-focused fieldset': {
-                    borderColor: '#ffffff'
-                  }
-                }
-              }}
-            />
+        <Box
+          sx={{
+            padding: 2,
+            height: (theme) => theme.trello.columnFooterHeight
+          }}
+        >
+          {!openForm ? (
             <Box
               sx={{
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'right',
-                gap: 1
+                justifyContent: 'space-between',
+                height: '100%'
               }}
             >
               <Button
+                startIcon={<AddCardIcon />}
+                onClick={() => {
+                  setOpenForm(!openForm)
+                }}
+              >
+                Add new card
+              </Button>
+              <Tooltip title='Drag to move'>
+                <DragHandleIcon sx={{ cursor: 'pointer' }} />
+              </Tooltip>
+            </Box>
+          ) : (
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1,
+                height: '100%'
+              }}
+            >
+              <TextField
+                autoFocus
+                label='Enter card title...'
+                type='text'
                 size='small'
+                onChange={(e) => {
+                  setCardTitle(e.target.value)
+                }}
+                value={cardTitle}
+                InputProps={{
+                  endAdornment: (
+                    <Tooltip
+                      placement='right'
+                      title='Clear'
+                      onClick={() => {
+                        setCardTitle('')
+                      }}
+                      sx={{
+                        display: cardTitle || 'none',
+                        color: '#ffffff',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      <CloseIcon fontSize='small' />
+                    </Tooltip>
+                  )
+                }}
+                sx={{
+                  '& label, & input, & label.Mui-focused': {
+                    color: '#ffffff'
+                  },
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset, &:hover fieldset, &.Mui-focused fieldset': {
+                      borderColor: '#ffffff'
+                    }
+                  }
+                }}
+              />
+
+              <Button
                 variant='contained'
                 onClick={() => {
                   if (!cardTitle) {
                     toast.error('Please enter Card Title!', {
-                      position: 'bottom-left',
+                      position: 'bottom-right',
                       theme: 'colored'
                     })
                   } else {
                     console.log(cardTitle)
                     toast.success('Add Card succesfully!', {
-                      position: 'bottom-left',
+                      position: 'bottom-right',
                       theme: 'colored'
                     })
                     setOpenForm(!openForm)
@@ -269,7 +260,6 @@ function Column({ column }) {
                 Add
               </Button>
               <Button
-                size='small'
                 variant='contained'
                 onClick={() => {
                   setOpenForm(!openForm)
@@ -287,8 +277,8 @@ function Column({ column }) {
                 Cancel
               </Button>
             </Box>
-          </Box>
-        )}
+          )}
+        </Box>
       </Box>
     </Box>
   )
