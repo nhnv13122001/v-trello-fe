@@ -7,8 +7,6 @@ import {
   DndContext,
   useSensors,
   DragOverlay,
-  MouseSensor,
-  TouchSensor,
   pointerWithin,
   closestCorners,
   getFirstCollision
@@ -19,6 +17,7 @@ import Column from './ListColumns/Column/Column'
 import ListColumns from './ListColumns/ListColumns'
 import { generatePlaceholderCard } from '~/utils/formatter'
 import Card from './ListColumns/Column/ListCards/Card/Card'
+import { MouseSensor, TouchSensor } from '~/customLibraries/MySensor'
 
 const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',

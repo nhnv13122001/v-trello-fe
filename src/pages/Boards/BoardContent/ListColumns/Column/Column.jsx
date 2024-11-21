@@ -10,7 +10,6 @@ import Cloud from '@mui/icons-material/Cloud'
 import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
 import { useSortable } from '@dnd-kit/sortable'
-import CloseIcon from '@mui/icons-material/Close'
 import Typography from '@mui/material/Typography'
 import AddCardIcon from '@mui/icons-material/AddCard'
 import ListItemIcon from '@mui/material/ListItemIcon'
@@ -192,6 +191,7 @@ function Column({ column }) {
               }}
             >
               <TextField
+                data-no-dnd='true'
                 autoFocus
                 label='Enter card title...'
                 type='text'
@@ -200,37 +200,26 @@ function Column({ column }) {
                   setCardTitle(e.target.value)
                 }}
                 value={cardTitle}
-                InputProps={{
-                  endAdornment: (
-                    <Tooltip
-                      placement='right'
-                      title='Clear'
-                      onClick={() => {
-                        setCardTitle('')
-                      }}
-                      sx={{
-                        display: cardTitle || 'none',
-                        color: '#ffffff',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      <CloseIcon fontSize='small' />
-                    </Tooltip>
-                  )
-                }}
                 sx={{
-                  '& label, & input, & label.Mui-focused': {
-                    color: '#ffffff'
+                  '& input': {
+                    color: (theme) =>
+                      theme.palette.mode === 'dark' ? '#ffffff' : '#212121',
+                    borderRadius: '4px',
+                    backgroundColor: (theme) =>
+                      theme.palette.mode === 'dark' ? '#1e1e1e' : '#ffffff'
+                  },
+                  '& label, & label.Mui-focused': {
+                    color: (theme) => theme.palette.primary.main
                   },
                   '& .MuiOutlinedInput-root': {
                     '& fieldset, &:hover fieldset, &.Mui-focused fieldset': {
-                      borderColor: '#ffffff'
+                      borderColor: (theme) => theme.palette.primary.main
                     }
                   }
                 }}
               />
-
               <Button
+                data-no-dnd='true'
                 variant='contained'
                 onClick={() => {
                   if (!cardTitle) {
@@ -239,7 +228,6 @@ function Column({ column }) {
                       theme: 'colored'
                     })
                   } else {
-                    console.log(cardTitle)
                     toast.success('Add Card succesfully!', {
                       position: 'bottom-right',
                       theme: 'colored'
@@ -260,6 +248,7 @@ function Column({ column }) {
                 Add
               </Button>
               <Button
+                data-no-dnd='true'
                 variant='contained'
                 onClick={() => {
                   setOpenForm(!openForm)

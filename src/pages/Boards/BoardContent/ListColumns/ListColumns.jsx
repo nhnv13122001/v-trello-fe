@@ -139,7 +139,6 @@ function ListColumns({ columns }) {
                       theme: 'colored'
                     })
                   } else {
-                    console.log(columnTitle)
                     toast.success('Add Column succesfully!', {
                       position: 'bottom-left',
                       theme: 'colored'
