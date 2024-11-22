@@ -24,7 +24,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import { mapOrder } from '~/utils/sort'
 import ListCards from './ListCards/ListCards'
 
-function Column({ column }) {
+function Column({ column, addNewCard }) {
   const [openForm, setOpenForm] = useState(false)
   const [cardTitle, setCardTitle] = useState('')
   const {
@@ -221,13 +221,17 @@ function Column({ column }) {
               <Button
                 data-no-dnd='true'
                 variant='contained'
-                onClick={() => {
+                onClick={async () => {
                   if (!cardTitle) {
                     toast.error('Please enter Card Title!', {
                       position: 'bottom-right',
                       theme: 'colored'
                     })
                   } else {
+                    await addNewCard({
+                      title: cardTitle,
+                      columnId: column._id
+                    })
                     toast.success('Add Card succesfully!', {
                       position: 'bottom-right',
                       theme: 'colored'

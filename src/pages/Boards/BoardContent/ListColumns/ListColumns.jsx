@@ -12,7 +12,7 @@ import {
 import Column from './Column/Column'
 import { TextField, Tooltip } from '@mui/material'
 
-function ListColumns({ columns }) {
+function ListColumns({ columns, addNewColumn, addNewCard }) {
   const [openForm, setOpenForm] = useState(false)
   const [columnTitle, setColumnTitle] = useState('')
 
@@ -39,7 +39,7 @@ function ListColumns({ columns }) {
         }}
       >
         {columns?.map((column) => (
-          <Column key={column._id} column={column} />
+          <Column key={column._id} column={column} addNewCard={addNewCard} />
         ))}
 
         {!openForm ? (
@@ -132,13 +132,16 @@ function ListColumns({ columns }) {
               <Button
                 size='small'
                 variant='contained'
-                onClick={() => {
+                onClick={async () => {
                   if (!columnTitle) {
                     toast.error('Please enter Column Title!', {
                       position: 'bottom-left',
                       theme: 'colored'
                     })
                   } else {
+                    await addNewColumn({
+                      title: columnTitle
+                    })
                     toast.success('Add Column succesfully!', {
                       position: 'bottom-left',
                       theme: 'colored'
