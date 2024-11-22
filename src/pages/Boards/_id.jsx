@@ -4,7 +4,12 @@ import Container from '@mui/material/Container'
 import BoardBar from './BoardBar/BoardBar'
 import AppBar from '~/components/AppBar/AppBar'
 import BoardContent from './BoardContent/BoardContent'
-import { addNewCardAPI, addNewColumnAPI, fetchBoardDetailsAPI } from '~/apis'
+import {
+  addNewCardAPI,
+  addNewColumnAPI,
+  fetchBoardDetailsAPI,
+  updateBoardDetailsAPI
+} from '~/apis'
 import { isEmpty } from 'lodash'
 import { generatePlaceholderCard } from '~/utils/formatter'
 
@@ -51,6 +56,19 @@ function Board() {
     setBoard(newBoard)
   }
 
+  const moveColumns = async (dndOrderedColumns) => {
+    const dndOrderedColumnsIds = dndOrderedColumns.map((c) => c._id)
+
+    const newBoard = { ...board }
+    newBoard.columns = dndOrderedColumns
+    newBoard.columnOrderIds = dndOrderedColumnsIds
+    setBoard(newBoard)
+
+    await updateBoardDetailsAPI(board._id, {
+      columnOrderIds: dndOrderedColumnsIds
+    })
+  }
+
   return (
     <Container disableGutters maxWidth='false' sx={{ height: '100vh' }}>
       <AppBar />
@@ -59,6 +77,7 @@ function Board() {
         board={board}
         addNewColumn={addNewColumn}
         addNewCard={addNewCard}
+        moveColumns={moveColumns}
       />
     </Container>
   )
