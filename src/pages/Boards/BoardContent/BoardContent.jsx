@@ -24,7 +24,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-function BoardContent({ board }) {
+function BoardContent({ board, addNewColumn, addNewCard }) {
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
       distance: 1
@@ -304,7 +304,11 @@ function BoardContent({ board }) {
             theme.palette.mode === 'dark' ? '#34495e' : '#1976d2'
         }}
       >
-        <ListColumns columns={orderedColumns} />
+        <ListColumns
+          columns={orderedColumns}
+          addNewColumn={addNewColumn}
+          addNewCard={addNewCard}
+        />
         <DragOverlay>
           {!activeDragItemType && null}
           {activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN && (
