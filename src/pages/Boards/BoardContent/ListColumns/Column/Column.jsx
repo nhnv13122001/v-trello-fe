@@ -54,7 +54,7 @@ function Column({ column, addNewCard }) {
     setAnchorEl(null)
   }
 
-  const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
+  const orderedCards = column?.cards
   return (
     <Box ref={setNodeRef} style={dndKitColumnStyle} {...attributes}>
       <Box

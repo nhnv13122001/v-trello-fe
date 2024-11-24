@@ -1,6 +1,11 @@
+import { isEmpty } from 'lodash'
+import Box from '@mui/material/Box'
 import { useEffect, useState } from 'react'
 import Container from '@mui/material/Container'
+import Typography from '@mui/material/Typography'
+import CircularProgress from '@mui/material/CircularProgress'
 
+import { mapOrder } from '~/utils/sort'
 import BoardBar from './BoardBar/BoardBar'
 import AppBar from '~/components/AppBar/AppBar'
 import BoardContent from './BoardContent/BoardContent'
@@ -8,9 +13,9 @@ import {
   addNewCardAPI,
   addNewColumnAPI,
   fetchBoardDetailsAPI,
-  updateBoardDetailsAPI
+  updateBoardDetailsAPI,
+  updateColumnDetailsAPI
 } from '~/apis'
-import { isEmpty } from 'lodash'
 import { generatePlaceholderCard } from '~/utils/formatter'
 
 function Board() {
@@ -19,10 +24,13 @@ function Board() {
   useEffect(() => {
     const boardId = '6737fed60d600568968a2d68'
     fetchBoardDetailsAPI(boardId).then((board) => {
+      board.columns = mapOrder(board?.columns, board?.columnOrderIds, '_id')
       board.columns.forEach((column) => {
         if (isEmpty(column.cards)) {
           column.cards = [generatePlaceholderCard(column)]
           column.cardOrderIds = [generatePlaceholderCard(column)._id]
+        } else {
+          column.cards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
         }
       })
       setBoard(board)
@@ -69,6 +77,43 @@ function Board() {
     })
   }
 
+  const moveCardsInSameColumn = async (
+    dndOrderedCards,
+    dndOrderedCardsIds,
+    columnId
+  ) => {
+    const newBoard = { ...board }
+    const columnToUpdate = newBoard.columns.find(
+      (column) => column._id === columnId
+    )
+    if (columnToUpdate) {
+      columnToUpdate.cards = dndOrderedCards
+      columnToUpdate.cardOrderIds = dndOrderedCardsIds
+    }
+    setBoard(newBoard)
+
+    await updateColumnDetailsAPI(columnId, {
+      cardOrderIds: dndOrderedCardsIds
+    })
+  }
+
+  if (!board) {
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 2,
+          height: '100vh',
+          width: '100vw'
+        }}
+      >
+        <CircularProgress />
+        <Typography>Loading...</Typography>
+      </Box>
+    )
+  }
   return (
     <Container disableGutters maxWidth='false' sx={{ height: '100vh' }}>
       <AppBar />
@@ -78,6 +123,7 @@ function Board() {
         addNewColumn={addNewColumn}
         addNewCard={addNewCard}
         moveColumns={moveColumns}
+        moveCardsInSameColumn={moveCardsInSameColumn}
       />
     </Container>
   )
