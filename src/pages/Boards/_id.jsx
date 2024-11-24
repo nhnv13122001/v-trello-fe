@@ -14,7 +14,8 @@ import {
   addNewColumnAPI,
   fetchBoardDetailsAPI,
   updateBoardDetailsAPI,
-  updateColumnDetailsAPI
+  updateColumnDetailsAPI,
+  moveCardsToDifferentColumnAPI
 } from '~/apis'
 import { generatePlaceholderCard } from '~/utils/formatter'
 
@@ -97,6 +98,30 @@ function Board() {
     })
   }
 
+  const moveCardsToDifferentColumn = async (
+    currentCardId,
+    prevColumnId,
+    nextColumnId,
+    dndOrderedColumns
+  ) => {
+    const dndOrderedColumnsIds = dndOrderedColumns.map((c) => c._id)
+    const newBoard = { ...board }
+    newBoard.columns = dndOrderedColumns
+    newBoard.columnOrderIds = dndOrderedColumnsIds
+
+    moveCardsToDifferentColumnAPI({
+      currentCardId,
+      prevColumnId,
+      prevCardOrderIds: dndOrderedColumns.find(
+        (column) => column._id === prevColumnId
+      )?.cardOrderIds,
+      nextColumnId,
+      nextCardOrderIds: dndOrderedColumns.find(
+        (column) => column._id === nextColumnId
+      )?.cardOrderIds
+    })
+  }
+
   if (!board) {
     return (
       <Box
@@ -124,6 +149,7 @@ function Board() {
         addNewCard={addNewCard}
         moveColumns={moveColumns}
         moveCardsInSameColumn={moveCardsInSameColumn}
+        moveCardsToDifferentColumn={moveCardsToDifferentColumn}
       />
     </Container>
   )
