@@ -29,7 +29,8 @@ function BoardContent({
   addNewCard,
   moveColumns,
   moveCardsInSameColumn,
-  moveCardsToDifferentColumn
+  moveCardsToDifferentColumn,
+  deleteColumnDetails
 }) {
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
@@ -342,6 +343,7 @@ function BoardContent({
           columns={orderedColumns}
           addNewColumn={addNewColumn}
           addNewCard={addNewCard}
+          deleteColumnDetails={deleteColumnDetails}
         />
         <DragOverlay>
           {!activeDragItemType && null}
