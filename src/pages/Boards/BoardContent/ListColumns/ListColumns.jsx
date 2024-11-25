@@ -12,7 +12,12 @@ import {
 import Column from './Column/Column'
 import { TextField, Tooltip } from '@mui/material'
 
-function ListColumns({ columns, addNewColumn, addNewCard }) {
+function ListColumns({
+  columns,
+  addNewColumn,
+  addNewCard,
+  deleteColumnDetails
+}) {
   const [openForm, setOpenForm] = useState(false)
   const [columnTitle, setColumnTitle] = useState('')
 
@@ -39,7 +44,12 @@ function ListColumns({ columns, addNewColumn, addNewCard }) {
         }}
       >
         {columns?.map((column) => (
-          <Column key={column._id} column={column} addNewCard={addNewCard} />
+          <Column
+            key={column._id}
+            column={column}
+            addNewCard={addNewCard}
+            deleteColumnDetails={deleteColumnDetails}
+          />
         ))}
 
         {!openForm ? (

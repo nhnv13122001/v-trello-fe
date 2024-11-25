@@ -10,6 +10,7 @@ import Cloud from '@mui/icons-material/Cloud'
 import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
 import { useSortable } from '@dnd-kit/sortable'
+import { useConfirm } from 'material-ui-confirm'
 import Typography from '@mui/material/Typography'
 import AddCardIcon from '@mui/icons-material/AddCard'
 import ListItemIcon from '@mui/material/ListItemIcon'
@@ -21,10 +22,9 @@ import DragHandleIcon from '@mui/icons-material/DragHandle'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 
-import { mapOrder } from '~/utils/sort'
 import ListCards from './ListCards/ListCards'
 
-function Column({ column, addNewCard }) {
+function Column({ column, addNewCard, deleteColumnDetails }) {
   const [openForm, setOpenForm] = useState(false)
   const [cardTitle, setCardTitle] = useState('')
   const {
@@ -54,6 +54,7 @@ function Column({ column, addNewCard }) {
     setAnchorEl(null)
   }
 
+  const confirmDeleteColumn = useConfirm()
   const orderedCards = column?.cards
   return (
     <Box ref={setNodeRef} style={dndKitColumnStyle} {...attributes}>
@@ -105,13 +106,26 @@ function Column({ column, addNewCard }) {
               anchorEl={anchorEl}
               open={open}
               onClose={handleClose}
+              onClick={handleClose}
               MenuListProps={{
                 'aria-labelledby': 'basic-column-dropdown'
               }}
             >
-              <MenuItem>
+              <MenuItem
+                onClick={() => {
+                  setOpenForm(!openForm)
+                }}
+                sx={{
+                  '&:hover': {
+                    color: 'success.light',
+                    '& .addCardIcon': {
+                      color: 'success.light'
+                    }
+                  }
+                }}
+              >
                 <ListItemIcon>
-                  <AddCardIcon fontSize='small' />
+                  <AddCardIcon className='addCardIcon' fontSize='small' />
                 </ListItemIcon>
                 <ListItemText>Add new card</ListItemText>
               </MenuItem>
@@ -136,11 +150,34 @@ function Column({ column, addNewCard }) {
 
               <Divider />
 
-              <MenuItem>
+              <MenuItem
+                onClick={() => {
+                  confirmDeleteColumn({
+                    title: 'Delete Column?',
+                    description:
+                      'This action will permanently delete your Column and its Cards! Are you sure?'
+                  })
+                    .then(() => {
+                      deleteColumnDetails(column._id)
+                    })
+                    .catch(() => {})
+                }}
+                sx={{
+                  '&:hover': {
+                    color: 'warning.dark',
+                    '& .deleteForeverIcon': {
+                      color: 'warning.dark'
+                    }
+                  }
+                }}
+              >
                 <ListItemIcon>
-                  <DeleteForeverIcon fontSize='small' />
+                  <DeleteForeverIcon
+                    className='deleteForeverIcon'
+                    fontSize='small'
+                  />
                 </ListItemIcon>
-                <ListItemText>Remove this column</ListItemText>
+                <ListItemText>Delete this column</ListItemText>
               </MenuItem>
               <MenuItem>
                 <ListItemIcon>

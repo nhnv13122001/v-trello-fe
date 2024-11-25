@@ -15,9 +15,11 @@ import {
   fetchBoardDetailsAPI,
   updateBoardDetailsAPI,
   updateColumnDetailsAPI,
-  moveCardsToDifferentColumnAPI
+  moveCardsToDifferentColumnAPI,
+  deleteColumnDetailsAPI
 } from '~/apis'
 import { generatePlaceholderCard } from '~/utils/formatter'
+import { toast } from 'react-toastify'
 
 function Board() {
   const [board, setBoard] = useState(null)
@@ -121,7 +123,7 @@ function Board() {
     )?.cardOrderIds
     if (prevCardOrderIds[0].includes('-placeholder-card')) prevCardOrderIds = []
 
-    moveCardsToDifferentColumnAPI({
+    await moveCardsToDifferentColumnAPI({
       currentCardId,
       prevColumnId,
       prevCardOrderIds,
@@ -129,6 +131,24 @@ function Board() {
       nextCardOrderIds: dndOrderedColumns.find(
         (column) => column._id === nextColumnId
       )?.cardOrderIds
+    })
+  }
+
+  const deleteColumnDetails = async (columnId) => {
+    const newBoard = { ...board }
+    newBoard.columns = newBoard.columns.filter(
+      (column) => column._id !== columnId
+    )
+    newBoard.columnOrderIds = newBoard.columnOrderIds.filter(
+      (_id) => _id !== columnId
+    )
+    setBoard(newBoard)
+
+    deleteColumnDetailsAPI(columnId).then((res) => {
+      toast.success(res?.deleteResult, {
+        position: 'bottom-left',
+        theme: 'colored'
+      })
     })
   }
 
@@ -160,6 +180,7 @@ function Board() {
         moveColumns={moveColumns}
         moveCardsInSameColumn={moveCardsInSameColumn}
         moveCardsToDifferentColumn={moveCardsToDifferentColumn}
+        deleteColumnDetails={deleteColumnDetails}
       />
     </Container>
   )
