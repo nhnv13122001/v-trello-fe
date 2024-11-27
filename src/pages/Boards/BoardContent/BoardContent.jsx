@@ -25,12 +25,9 @@ const ACTIVE_DRAG_ITEM_TYPE = {
 
 function BoardContent({
   board,
-  addNewColumn,
-  addNewCard,
   moveColumns,
   moveCardsInSameColumn,
-  moveCardsToDifferentColumn,
-  deleteColumnDetails
+  moveCardsToDifferentColumn
 }) {
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
@@ -324,7 +321,6 @@ function BoardContent({
   return (
     <DndContext
       sensors={sensors}
-      // collisionDetection={closestCorners}
       collisionDetection={collisionDetectionStrategy}
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}
@@ -339,12 +335,7 @@ function BoardContent({
             theme.palette.mode === 'dark' ? '#34495e' : '#1976d2'
         }}
       >
-        <ListColumns
-          columns={orderedColumns}
-          addNewColumn={addNewColumn}
-          addNewCard={addNewCard}
-          deleteColumnDetails={deleteColumnDetails}
-        />
+        <ListColumns columns={orderedColumns} />
         <DragOverlay>
           {!activeDragItemType && null}
           {activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN && (

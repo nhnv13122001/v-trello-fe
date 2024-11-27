@@ -23,10 +23,20 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 
 import ListCards from './ListCards/ListCards'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  selectCurrentActiveBoard,
+  updateCurrentActiveBoard
+} from '~/redux/activeBoard/activeBoardSlice'
+import { cloneDeep } from 'lodash'
+import { addCardAPI, deleteColumnAPI } from '~/apis'
 
-function Column({ column, addNewCard, deleteColumnDetails }) {
-  const [openForm, setOpenForm] = useState(false)
+function Column({ column }) {
+  const dispatch = useDispatch()
+  const confirmDeleteColumn = useConfirm()
   const [cardTitle, setCardTitle] = useState('')
+  const [openForm, setOpenForm] = useState(false)
+  const board = useSelector(selectCurrentActiveBoard)
   const {
     attributes,
     listeners,
@@ -35,6 +45,8 @@ function Column({ column, addNewCard, deleteColumnDetails }) {
     transition,
     isDragging
   } = useSortable({ id: column._id, data: { ...column } })
+
+  const orderedCards = column?.cards
   const dndKitColumnStyle = {
     touchAction: 'none',
     // Nếu sử dụng CSS.Transform như docs sẽ lỗi kiểu stretch
@@ -54,8 +66,68 @@ function Column({ column, addNewCard, deleteColumnDetails }) {
     setAnchorEl(null)
   }
 
-  const confirmDeleteColumn = useConfirm()
-  const orderedCards = column?.cards
+  const handleAddCard = async () => {
+    if (!cardTitle) {
+      toast.error('Please enter Card Title!', {
+        position: 'bottom-right',
+        theme: 'colored'
+      })
+    } else {
+      const createdCard = await addCardAPI({
+        title: cardTitle,
+        columnId: column._id,
+        boardId: board._id
+      })
+      const updatedBoard = cloneDeep(board)
+      const columnToUpdate = updatedBoard.columns.find(
+        (column) => createdCard.columnId === column._id
+      )
+      if (columnToUpdate) {
+        if (columnToUpdate.cards.some((card) => card.FE_PlaceholderCard)) {
+          columnToUpdate.cards = [createdCard]
+          columnToUpdate.cardOrderIds = [createdCard._id]
+        } else {
+          columnToUpdate.cards.push(createdCard)
+          columnToUpdate.cardOrderIds.push(createdCard._id)
+        }
+      }
+      dispatch(updateCurrentActiveBoard(updatedBoard))
+
+      toast.success('Add Card succesfully!', {
+        position: 'bottom-right',
+        theme: 'colored'
+      })
+      setOpenForm(!openForm)
+      setCardTitle('')
+    }
+  }
+
+  const handleDeleteColumn = () => {
+    confirmDeleteColumn({
+      title: 'Delete Column?',
+      description:
+        'This action will permanently delete your Column and its Cards! Are you sure?'
+    })
+      .then(() => {
+        const updatedBoard = cloneDeep(board)
+        updatedBoard.columns = updatedBoard.columns.filter(
+          (c) => c._id !== column._id
+        )
+        updatedBoard.columnOrderIds = updatedBoard.columnOrderIds.filter(
+          (_id) => _id !== column._id
+        )
+        dispatch(updateCurrentActiveBoard(updatedBoard))
+
+        deleteColumnAPI(column._id).then((res) => {
+          toast.success(res?.deleteResult, {
+            position: 'bottom-left',
+            theme: 'colored'
+          })
+        })
+      })
+      .catch(() => {})
+  }
+
   return (
     <Box ref={setNodeRef} style={dndKitColumnStyle} {...attributes}>
       <Box
@@ -151,17 +223,7 @@ function Column({ column, addNewCard, deleteColumnDetails }) {
               <Divider />
 
               <MenuItem
-                onClick={() => {
-                  confirmDeleteColumn({
-                    title: 'Delete Column?',
-                    description:
-                      'This action will permanently delete your Column and its Cards! Are you sure?'
-                  })
-                    .then(() => {
-                      deleteColumnDetails(column._id)
-                    })
-                    .catch(() => {})
-                }}
+                onClick={handleDeleteColumn}
                 sx={{
                   '&:hover': {
                     color: 'warning.dark',
@@ -258,25 +320,7 @@ function Column({ column, addNewCard, deleteColumnDetails }) {
               <Button
                 data-no-dnd='true'
                 variant='contained'
-                onClick={async () => {
-                  if (!cardTitle) {
-                    toast.error('Please enter Card Title!', {
-                      position: 'bottom-right',
-                      theme: 'colored'
-                    })
-                  } else {
-                    await addNewCard({
-                      title: cardTitle,
-                      columnId: column._id
-                    })
-                    toast.success('Add Card succesfully!', {
-                      position: 'bottom-right',
-                      theme: 'colored'
-                    })
-                    setOpenForm(!openForm)
-                    setCardTitle('')
-                  }
-                }}
+                onClick={handleAddCard}
                 sx={{
                   color: '#ffffff',
                   '&, &:hover': {
