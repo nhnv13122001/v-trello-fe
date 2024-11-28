@@ -20,7 +20,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <ConfirmProvider>
             <CssBaseline />
             <App />
-            <ToastContainer />
+            <ToastContainer theme='colored' />
           </ConfirmProvider>
         </CssVarsProvider>
       </React.StrictMode>

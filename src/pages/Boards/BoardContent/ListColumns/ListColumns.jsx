@@ -168,6 +168,7 @@ function ListColumns({ columns }) {
               }}
             >
               <Button
+                className='interceptor-loading'
                 size='small'
                 variant='contained'
                 onClick={handleAddColumn}
