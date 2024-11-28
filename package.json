@@ -1,10 +1,10 @@
 {
-  "name": "vite-trello-web-base-project",
+  "name": "v-trello-fe",
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "author": "TrungQuanDev - Một Lập Trình Viên",
-  "description": "https://youtube.com/@trungquandev",
+  "author": "nhnv13122001",
+  "description": "https://github.com/nhnv13122001",
   "engines": {
     "node": ">=18.x"
   },
