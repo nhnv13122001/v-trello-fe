@@ -1,6 +1,8 @@
 import Box from '@mui/material/Box'
 import Zoom from '@mui/material/Zoom'
+import { toast } from 'react-toastify'
 import Alert from '@mui/material/Alert'
+import { useDispatch } from 'react-redux'
 import { useForm } from 'react-hook-form'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
@@ -9,8 +11,9 @@ import LockIcon from '@mui/icons-material/Lock'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import CardActions from '@mui/material/CardActions'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams, useNavigate } from 'react-router-dom'
 
+import { loginAPI } from '~/redux/user/userSlice'
 import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
 import { ReactComponent as TrelloIcon } from '~/assets/trello.svg'
 import {
@@ -20,6 +23,8 @@ import {
 } from '~/utils/validators'
 
 function Login() {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const verifiedEmail = searchParams.get('verifiedEmail')
   const registeredEmail = searchParams.get('registeredEmail')
@@ -29,8 +34,17 @@ function Login() {
     handleSubmit,
     formState: { errors }
   } = useForm()
-  const handleLogin = (data) => console.log(data)
 
+  const handleLogin = (data) => {
+    const { email, password } = data
+    toast
+      .promise(dispatch(loginAPI({ email, password })), {
+        pending: 'Logging in...'
+      })
+      .then((res) => {
+        if (!res.error) navigate('/')
+      })
+  }
   return (
     <form onSubmit={handleSubmit(handleLogin)}>
       <Zoom in={true} style={{ transitionDelay: '200ms' }}>
