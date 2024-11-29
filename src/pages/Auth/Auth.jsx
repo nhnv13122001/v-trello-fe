@@ -1,11 +1,19 @@
 import Box from '@mui/material/Box'
-import { useLocation } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 
 import Login from './Login'
 import Register from './Register'
+import { selectCurrentUser } from '~/redux/user/userSlice'
 
 function Auth() {
   const location = useLocation()
+
+  const currentUser = useSelector(selectCurrentUser)
+
+  if (currentUser) {
+    return <Navigate to='/' replace={true} />
+  }
 
   return (
     <Box

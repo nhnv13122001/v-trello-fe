@@ -7,6 +7,8 @@ const authorizedAxiosInstance = axios.create()
 
 authorizedAxiosInstance.defaults.timeout = 1000 * 60 * 10
 
+// withCredentials sẽ cho phép axios tự động gửi cookie trong mỗi request lên BE
+// phục vụ việc chúng ta sẽ lưu JWT (refresh & access) vào trong httpOnly Cookie của trình duyệt
 authorizedAxiosInstance.defaults.withCredentials = true
 
 authorizedAxiosInstance.interceptors.request.use(
