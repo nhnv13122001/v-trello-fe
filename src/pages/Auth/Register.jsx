@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box'
 import Zoom from '@mui/material/Zoom'
-import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { useForm } from 'react-hook-form'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
@@ -9,6 +9,7 @@ import LockIcon from '@mui/icons-material/Lock'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import CardActions from '@mui/material/CardActions'
+import { Link, useNavigate } from 'react-router-dom'
 
 import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
 import { ReactComponent as TrelloIcon } from '~/assets/trello.svg'
@@ -20,15 +21,26 @@ import {
   PASSWORD_RULE,
   PASSWORD_RULE_MESSAGE
 } from '~/utils/validators'
+import { registerAPI } from '~/apis'
 
 function Register() {
+  const navigate = useNavigate()
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch
   } = useForm()
-  const handleRegister = (data) => console.log(data)
+  const handleRegister = (data) => {
+    const { email, password } = data
+    toast
+      .promise(registerAPI({ email, password }), {
+        pending: 'Registration is in process...'
+      })
+      .then((user) => {
+        navigate(`/login?registeredEmail=${user.email}`)
+      })
+  }
 
   return (
     <form onSubmit={handleSubmit(handleRegister)}>

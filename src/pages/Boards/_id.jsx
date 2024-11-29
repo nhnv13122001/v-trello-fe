@@ -1,15 +1,13 @@
 import { cloneDeep } from 'lodash'
 import { useEffect } from 'react'
-import Box from '@mui/material/Box'
 import { useParams } from 'react-router-dom'
 import Container from '@mui/material/Container'
-import Typography from '@mui/material/Typography'
 import { useDispatch, useSelector } from 'react-redux'
-import CircularProgress from '@mui/material/CircularProgress'
 
 import BoardBar from './BoardBar/BoardBar'
 import AppBar from '~/components/AppBar/AppBar'
 import BoardContent from './BoardContent/BoardContent'
+import PageLoadingSpinner from '~/components/Loading/PageLoadingSpinner'
 import {
   updateBoardDetailsAPI,
   updateColumnDetailsAPI,
@@ -92,24 +90,7 @@ function Board() {
   }
 
   if (!board) {
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: 2,
-          height: '100vh',
-          width: '100vw',
-          color: '#ffffff',
-          backgroundColor: (theme) =>
-            theme.palette.mode === 'dark' ? '#34495e' : '#1976d2'
-        }}
-      >
-        <CircularProgress color='inherit' />
-        <Typography>Loading...</Typography>
-      </Box>
-    )
+    return <PageLoadingSpinner caption='Loading Board...' />
   }
   return (
     <Container disableGutters maxWidth='false' sx={{ height: '100vh' }}>
