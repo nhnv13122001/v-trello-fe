@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Menu from '@mui/material/Menu'
+import { Link } from 'react-router-dom'
 import Avatar from '@mui/material/Avatar'
 import Divider from '@mui/material/Divider'
 import Tooltip from '@mui/material/Tooltip'
@@ -65,20 +66,27 @@ function Profiles() {
           'aria-labelledby': 'basic-button-profiles'
         }}
       >
-        <MenuItem
-          sx={{
-            '&:hover': {
-              color: 'success.light'
-            }
+        <Link
+          style={{
+            color: 'inherit'
           }}
+          to='/settings/account'
         >
-          <Avatar
-            src={currentUser?.avatar}
-            alt='Sasori'
-            sx={{ width: '28px', height: '28px', mr: 2 }}
-          />
-          Profile
-        </MenuItem>
+          <MenuItem
+            sx={{
+              '&:hover': {
+                color: 'success.light'
+              }
+            }}
+          >
+            <Avatar
+              src={currentUser?.avatar}
+              alt='Sasori'
+              sx={{ width: '28px', height: '28px', mr: 2 }}
+            />
+            Profile
+          </MenuItem>
+        </Link>
 
         <Divider />
         <MenuItem>

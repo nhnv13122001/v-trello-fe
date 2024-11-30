@@ -1,11 +1,12 @@
+import { useSelector } from 'react-redux'
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom'
 
 import Auth from '~/pages/Auth/Auth'
 import Board from '~/pages/Boards/_id'
 import NotFound from '~/pages/404/NotFound'
+import Settings from '~/pages/Settings/Settings'
+import { selectCurrentUser } from '~/redux/user/userSlice'
 import AccountVerification from '~/pages/Auth/AccountVerification'
-import { useSelector } from 'react-redux'
-import { selectCurrentUser } from './redux/user/userSlice'
 
 const ProtectedRoute = ({ user }) => {
   if (!user) return <Navigate to='/login' replace={true} />
@@ -25,6 +26,8 @@ function App() {
 
       <Route element={<ProtectedRoute user={currentUser} />}>
         <Route path='/boards/:boardId' element={<Board />} />
+        <Route path='/settings/account' element={<Settings />} />
+        <Route path='/settings/security' element={<Settings />} />
       </Route>
 
       <Route path='/login' element={<Auth />} />

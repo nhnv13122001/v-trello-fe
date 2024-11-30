@@ -1,14 +1,10 @@
 import { useState } from 'react'
 import Box from '@mui/material/Box'
-import Recent from './Menus/Recent'
-import Starred from './Menus/Starred'
-import Profiles from './Menus/Profiles'
 import Badge from '@mui/material/Badge'
-import Templates from './Menus/Templates'
+import { Link } from 'react-router-dom'
 import Button from '@mui/material/Button'
 import SvgIcon from '@mui/material/SvgIcon'
 import Tooltip from '@mui/material/Tooltip'
-import Workspaces from './Menus/Workspaces'
 import AppsIcon from '@mui/icons-material/Apps'
 import TextField from '@mui/material/TextField'
 import CloseIcon from '@mui/icons-material/Close'
@@ -19,6 +15,11 @@ import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 
+import Recent from './Menus/Recent'
+import Starred from './Menus/Starred'
+import Profiles from './Menus/Profiles'
+import Templates from './Menus/Templates'
+import Workspaces from './Menus/Workspaces'
 import ModeSelect from '../ModeSelect/ModeSelect'
 import { ReactComponent as TrelloIcon } from '~/assets/trello.svg'
 
@@ -42,18 +43,28 @@ function AppBar() {
     >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
         <AppsIcon />
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 0.5
-          }}
-        >
-          <SvgIcon component={TrelloIcon} fontSize='small' inheritViewBox />
-          <Typography sx={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
-            Trello
-          </Typography>
-        </Box>
+
+        <Link to='/'>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 0.5
+            }}
+          >
+            <SvgIcon
+              component={TrelloIcon}
+              fontSize='small'
+              inheritViewBox
+              sx={{ color: 'white' }}
+            />
+            <Typography
+              sx={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'white' }}
+            >
+              Trello
+            </Typography>
+          </Box>
+        </Link>
 
         <Box
           sx={{
