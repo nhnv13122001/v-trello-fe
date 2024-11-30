@@ -1,16 +1,25 @@
 import { useState } from 'react'
 import Menu from '@mui/material/Menu'
+import { Link } from 'react-router-dom'
 import Avatar from '@mui/material/Avatar'
 import Divider from '@mui/material/Divider'
 import Tooltip from '@mui/material/Tooltip'
 import MenuItem from '@mui/material/MenuItem'
 import Logout from '@mui/icons-material/Logout'
+import { useConfirm } from 'material-ui-confirm'
 import IconButton from '@mui/material/IconButton'
 import Settings from '@mui/icons-material/Settings'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import PersonAdd from '@mui/icons-material/PersonAdd'
+import { useSelector, useDispatch } from 'react-redux'
+
+import { logoutAPI, selectCurrentUser } from '~/redux/user/userSlice'
 
 function Profiles() {
+  const dispatch = useDispatch()
+  const confirmLogout = useConfirm()
+  const currentUser = useSelector(selectCurrentUser)
+
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   const handleClick = (event) => {
@@ -18,6 +27,15 @@ function Profiles() {
   }
   const handleClose = () => {
     setAnchorEl(null)
+  }
+  const handleLogout = () => {
+    confirmLogout({
+      title: 'Log out of your account?',
+      confirmationText: 'Confirm',
+      cancellationText: 'Cancel'
+    })
+      .then(() => dispatch(logoutAPI()))
+      .catch(() => {})
   }
 
   return (
@@ -32,7 +50,7 @@ function Profiles() {
           aria-expanded={open ? 'true' : undefined}
         >
           <Avatar
-            src='https://scontent.fsgn2-7.fna.fbcdn.net/v/t1.6435-9/123772445_2682345688692316_5804252625951566209_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=bd9a62&_nc_ohc=L8AbOFovDuIQ7kNvgGFPuDV&_nc_zt=23&_nc_ht=scontent.fsgn2-7.fna&_nc_gid=ArevpR97mjw3R3Ena0urckc&oh=00_AYByZ9HAgX_n61g9GTCYf_4YbQp78ALlLpDgtb_1kuhC9g&oe=674C505C'
+            src={currentUser?.avatar}
             alt='Sasori'
             sx={{ width: 36, height: 36 }}
           />
@@ -43,18 +61,33 @@ function Profiles() {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
+        onClick={handleClose}
         MenuListProps={{
           'aria-labelledby': 'basic-button-profiles'
         }}
       >
-        <MenuItem>
-          <Avatar sx={{ width: '28px', height: '28px', mr: 2 }} />
-          Profile
-        </MenuItem>
-        <MenuItem>
-          <Avatar sx={{ width: '28px', height: '28px', mr: 2 }} />
-          My account
-        </MenuItem>
+        <Link
+          style={{
+            color: 'inherit'
+          }}
+          to='/settings/account'
+        >
+          <MenuItem
+            sx={{
+              '&:hover': {
+                color: 'success.light'
+              }
+            }}
+          >
+            <Avatar
+              src={currentUser?.avatar}
+              alt='Sasori'
+              sx={{ width: '28px', height: '28px', mr: 2 }}
+            />
+            Profile
+          </MenuItem>
+        </Link>
+
         <Divider />
         <MenuItem>
           <ListItemIcon>
@@ -68,9 +101,19 @@ function Profiles() {
           </ListItemIcon>
           Settings
         </MenuItem>
-        <MenuItem>
+        <MenuItem
+          onClick={handleLogout}
+          sx={{
+            '&:hover': {
+              color: 'warning.dark',
+              '& .logout-icon': {
+                color: 'warning.dark'
+              }
+            }
+          }}
+        >
           <ListItemIcon>
-            <Logout fontSize='small' />
+            <Logout className='logout-icon' fontSize='small' />
           </ListItemIcon>
           Logout
         </MenuItem>

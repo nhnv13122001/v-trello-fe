@@ -318,6 +318,7 @@ function Column({ column }) {
                 }}
               />
               <Button
+                className='interceptor-loading'
                 data-no-dnd='true'
                 variant='contained'
                 onClick={handleAddCard}

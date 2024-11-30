@@ -1,33 +1,33 @@
 import { cloneDeep } from 'lodash'
 import { useEffect } from 'react'
-import Box from '@mui/material/Box'
+import { useParams } from 'react-router-dom'
 import Container from '@mui/material/Container'
-import Typography from '@mui/material/Typography'
 import { useDispatch, useSelector } from 'react-redux'
-import CircularProgress from '@mui/material/CircularProgress'
 
 import BoardBar from './BoardBar/BoardBar'
 import AppBar from '~/components/AppBar/AppBar'
 import BoardContent from './BoardContent/BoardContent'
-import {
-  fetchBoardDetailsAPI,
-  selectCurrentActiveBoard,
-  updateCurrentActiveBoard
-} from '~/redux/activeBoard/activeBoardSlice'
+import PageLoadingSpinner from '~/components/Loading/PageLoadingSpinner'
 import {
   updateBoardDetailsAPI,
   updateColumnDetailsAPI,
   moveCardsToDifferentColumnAPI
 } from '~/apis'
+import {
+  fetchBoardDetailsAPI,
+  selectCurrentActiveBoard,
+  updateCurrentActiveBoard
+} from '~/redux/activeBoard/activeBoardSlice'
 
 function Board() {
   const dispatch = useDispatch()
+  const { boardId } = useParams()
   const board = useSelector(selectCurrentActiveBoard)
 
   useEffect(() => {
-    const boardId = '6737fed60d600568968a2d68'
+    // const boardId = '6737fed60d600568968a2d68'
     dispatch(fetchBoardDetailsAPI(boardId))
-  }, [dispatch])
+  }, [dispatch, boardId])
 
   const moveColumns = async (dndOrderedColumns) => {
     const dndOrderedColumnsIds = dndOrderedColumns.map((c) => c._id)
@@ -90,21 +90,7 @@ function Board() {
   }
 
   if (!board) {
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: 2,
-          height: '100vh',
-          width: '100vw'
-        }}
-      >
-        <CircularProgress />
-        <Typography>Loading...</Typography>
-      </Box>
-    )
+    return <PageLoadingSpinner caption='Loading Board...' />
   }
   return (
     <Container disableGutters maxWidth='false' sx={{ height: '100vh' }}>
