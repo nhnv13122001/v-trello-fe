@@ -11,6 +11,13 @@ export const updateBoardDetailsAPI = async (boardId, updateData) => {
   return response.data
 }
 
+export const fetchBoardsAPI = async (searchPath) => {
+  const response = await authorizedAxiosInstance.get(
+    `${API_ROOT}/v1/boards${searchPath}`
+  )
+  return response.data
+}
+
 export const moveCardsToDifferentColumnAPI = async (updateData) => {
   const response = await authorizedAxiosInstance.put(
     `${API_ROOT}/v1/boards/supports/moving_card`,

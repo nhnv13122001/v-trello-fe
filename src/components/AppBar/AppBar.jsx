@@ -42,7 +42,11 @@ function AppBar() {
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-        <AppsIcon />
+        <Link to='/boards'>
+          <Tooltip title='Board List'>
+            <AppsIcon sx={{ color: '#ffffff', verticalAlign: 'middle' }} />
+          </Tooltip>
+        </Link>
 
         <Link to='/'>
           <Box
@@ -56,10 +60,10 @@ function AppBar() {
               component={TrelloIcon}
               fontSize='small'
               inheritViewBox
-              sx={{ color: 'white' }}
+              sx={{ color: '#ffffff' }}
             />
             <Typography
-              sx={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'white' }}
+              sx={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#ffffff' }}
             >
               Trello
             </Typography>
