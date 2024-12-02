@@ -4,7 +4,6 @@ import { useForm } from 'react-hook-form'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
-import { styled } from '@mui/material/styles'
 import MailIcon from '@mui/icons-material/Mail'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
@@ -15,22 +14,9 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd'
 
 import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
+import VisuallyHiddenInput from '~/components/Form/VisuallyHiddenInput'
 import { selectCurrentUser, updateUserAPI } from '~/redux/user/userSlice'
 import { FIELD_REQUIRED_MESSAGE, singleFileValidator } from '~/utils/validators'
-
-// Xử lý custom đẹp cái input file ở đây: https://mui.com/material-ui/react-button/#file-upload
-// Ngoài ra note thêm lib này từ docs của MUI nó recommend nếu cần dùng: https://github.com/viclafouch/mui-file-input
-const VisuallyHiddenInput = styled('input')({
-  clip: 'rect(0 0 0 0)',
-  clipPath: 'inset(50%)',
-  height: 1,
-  overflow: 'hidden',
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  whiteSpace: 'nowrap',
-  width: 1
-})
 
 function AccountTab() {
   const dispatch = useDispatch()

@@ -1,6 +1,7 @@
 import Button from '@mui/material/Button'
-import { Card as MuiCard } from '@mui/material'
 import { CSS } from '@dnd-kit/utilities'
+import { useDispatch } from 'react-redux'
+import { Card as MuiCard } from '@mui/material'
 import { useSortable } from '@dnd-kit/sortable'
 import CardMedia from '@mui/material/CardMedia'
 import GroupIcon from '@mui/icons-material/Group'
@@ -10,7 +11,10 @@ import CardActions from '@mui/material/CardActions'
 import CommentIcon from '@mui/icons-material/Comment'
 import AttachmentIcon from '@mui/icons-material/Attachment'
 
+import { updateCurrentActiveCard } from '~/redux/activeCard/activeCardSlice'
+
 function Card({ card }) {
+  const dispatch = useDispatch()
   const {
     attributes,
     listeners,
@@ -27,8 +31,14 @@ function Card({ card }) {
     transition,
     opacity: isDragging ? 0.5 : undefined
   }
+
+  const setActiveCard = () => {
+    dispatch(updateCurrentActiveCard(card))
+  }
+
   return (
     <MuiCard
+      onClick={setActiveCard}
       ref={setNodeRef}
       style={dndKitCardStyle}
       {...attributes}
