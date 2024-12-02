@@ -36,9 +36,10 @@ import ToggleFocusInput from '~/components/Form/ToggleFocusInput'
 import VisuallyHiddenInput from '~/components/Form/VisuallyHiddenInput'
 import { updateCardInBoard } from '~/redux/activeBoard/activeBoardSlice'
 import {
-  clearCurrentActiveCard,
   selectCurrentActiveCard,
-  updateCurrentActiveCard
+  updateCurrentActiveCard,
+  selectIsShowModalActiveCard,
+  clearAndHideCurrentActiveCard
 } from '~/redux/activeCard/activeCardSlice'
 
 const SidebarItem = styled(Box)(({ theme }) => ({
@@ -65,8 +66,9 @@ const SidebarItem = styled(Box)(({ theme }) => ({
 function ActiveCard() {
   const dispatch = useDispatch()
   const activeCard = useSelector(selectCurrentActiveCard)
+  const isShowModalActiveCard = useSelector(selectIsShowModalActiveCard)
   const handleCloseModal = () => {
-    dispatch(clearCurrentActiveCard())
+    dispatch(clearAndHideCurrentActiveCard())
   }
 
   const callApiUpdateCard = async (updateData) => {
@@ -105,7 +107,7 @@ function ActiveCard() {
   return (
     <Modal
       disableScrollLock
-      open={true}
+      open={isShowModalActiveCard}
       onClose={handleCloseModal}
       sx={{ overflowY: 'auto' }}
     >

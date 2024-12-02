@@ -11,7 +11,10 @@ import CardActions from '@mui/material/CardActions'
 import CommentIcon from '@mui/icons-material/Comment'
 import AttachmentIcon from '@mui/icons-material/Attachment'
 
-import { updateCurrentActiveCard } from '~/redux/activeCard/activeCardSlice'
+import {
+  showModalActiveCard,
+  updateCurrentActiveCard
+} from '~/redux/activeCard/activeCardSlice'
 
 function Card({ card }) {
   const dispatch = useDispatch()
@@ -34,6 +37,7 @@ function Card({ card }) {
 
   const setActiveCard = () => {
     dispatch(updateCurrentActiveCard(card))
+    dispatch(showModalActiveCard())
   }
 
   return (
