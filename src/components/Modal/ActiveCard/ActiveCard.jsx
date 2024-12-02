@@ -34,6 +34,7 @@ import { singleFileValidator } from '~/utils/validators'
 import CardDescriptionMdEditor from './CardDescriptionMdEditor'
 import ToggleFocusInput from '~/components/Form/ToggleFocusInput'
 import VisuallyHiddenInput from '~/components/Form/VisuallyHiddenInput'
+import { updateCardInBoard } from '~/redux/activeBoard/activeBoardSlice'
 import {
   clearCurrentActiveCard,
   selectCurrentActiveCard,
@@ -72,6 +73,8 @@ function ActiveCard() {
     const updatedCard = await updateCardDetailsAPI(activeCard._id, updateData)
 
     dispatch(updateCurrentActiveCard(updatedCard))
+
+    dispatch(updateCardInBoard(updatedCard))
 
     return updatedCard
   }
