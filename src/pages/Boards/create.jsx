@@ -16,6 +16,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
 
+import { addBoardAPI } from '~/apis'
 import { FIELD_REQUIRED_MESSAGE } from '~/utils/validators'
 
 const SidebarItem = styled(Box)(({ theme }) => ({
@@ -41,7 +42,7 @@ const BOARD_TYPES = {
   PRIVATE: 'private'
 }
 
-function SidebarCreateBoardModal() {
+function SidebarCreateBoardModal({ afterAddBoard }) {
   const {
     control,
     register,
@@ -60,9 +61,10 @@ function SidebarCreateBoardModal() {
 
   const submitCreateNewBoard = (data) => {
     const { title, description, type } = data
-    console.log('Board title: ', title)
-    console.log('Board description: ', description)
-    console.log('Board type: ', type)
+    addBoardAPI({ title, description, type }).then(() => {
+      handleCloseModal()
+      afterAddBoard()
+    })
   }
 
   return (
@@ -116,7 +118,6 @@ function SidebarCreateBoardModal() {
           >
             <LibraryAddIcon />
             <Typography variant='h6' component='h2'>
-              {' '}
               Create a new board
             </Typography>
           </Box>

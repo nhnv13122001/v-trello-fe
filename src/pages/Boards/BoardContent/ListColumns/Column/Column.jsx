@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { cloneDeep } from 'lodash'
 import Box from '@mui/material/Box'
 import Menu from '@mui/material/Menu'
 import { toast } from 'react-toastify'
@@ -11,10 +12,10 @@ import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
 import { useSortable } from '@dnd-kit/sortable'
 import { useConfirm } from 'material-ui-confirm'
-import Typography from '@mui/material/Typography'
 import AddCardIcon from '@mui/icons-material/AddCard'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
+import { useDispatch, useSelector } from 'react-redux'
 import ContentCut from '@mui/icons-material/ContentCut'
 import ContentCopy from '@mui/icons-material/ContentCopy'
 import ContentPaste from '@mui/icons-material/ContentPaste'
@@ -23,13 +24,12 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 
 import ListCards from './ListCards/ListCards'
-import { useDispatch, useSelector } from 'react-redux'
+import { addCardAPI, deleteColumnAPI, updateColumnDetailsAPI } from '~/apis'
+import ToggleFocusInput from '~/components/Form/ToggleFocusInput'
 import {
   selectCurrentActiveBoard,
   updateCurrentActiveBoard
 } from '~/redux/activeBoard/activeBoardSlice'
-import { cloneDeep } from 'lodash'
-import { addCardAPI, deleteColumnAPI } from '~/apis'
 
 function Column({ column }) {
   const dispatch = useDispatch()
@@ -128,6 +128,19 @@ function Column({ column }) {
       .catch(() => {})
   }
 
+  const onUpdateColumnTitle = (newTitle) => {
+    updateColumnDetailsAPI(column._id, { title: newTitle }).then(() => {
+      const updatedBoard = cloneDeep(board)
+      const columnToUpdate = updatedBoard.columns.find(
+        (c) => c._id === column._id
+      )
+      if (columnToUpdate) {
+        columnToUpdate.title = newTitle
+      }
+      dispatch(updateCurrentActiveBoard(updatedBoard))
+    })
+  }
+
   return (
     <Box ref={setNodeRef} style={dndKitColumnStyle} {...attributes}>
       <Box
@@ -152,16 +165,11 @@ function Column({ column }) {
             padding: 2
           }}
         >
-          <Typography
-            variant='h6'
-            sx={{
-              fontSize: '1rem',
-              fontWeight: 'bold',
-              cursor: 'pointer'
-            }}
-          >
-            {column?.title}
-          </Typography>
+          <ToggleFocusInput
+            value={column?.title}
+            onChangedValue={onUpdateColumnTitle}
+            data-no-dnd='true'
+          />
           <Box>
             <Tooltip title='More options'>
               <ExpandMoreIcon

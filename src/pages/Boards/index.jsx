@@ -22,7 +22,7 @@ import SidebarCreateBoardModal from './create'
 import AppBar from '~/components/AppBar/AppBar'
 import { DEFAULT_ITEMS_PER_PAGE, DEFAULT_PAGE } from '~/utils/constants'
 import PageLoadingSpinner from '~/components/Loading/PageLoadingSpinner'
-// Styles của mấy cái Sidebar item menu, anh gom lại ra đây cho gọn.
+
 const SidebarItem = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -49,13 +49,21 @@ function Boards() {
   const query = new URLSearchParams(location.search)
   const page = parseInt(query.get('page') || '1', 10)
 
+  const updateStateData = (res) => {
+    setBoards(res.boards || [])
+    setTotalBoards(res.totalBoards || 0)
+  }
+
   useEffect(() => {
-    fetchBoardsAPI(location.search).then((res) => {
-      setBoards(res.boards || [])
-      setTotalBoards(res.totalBoards || 0)
-    })
-    // ...
+    // fetchBoardsAPI(location.search).then((res) => {
+    //   updateStateData(res)
+    // })
+    fetchBoardsAPI(location.search).then(updateStateData)
   }, [location.search])
+
+  const afterAddBoard = () => {
+    fetchBoardsAPI(location.search).then(updateStateData)
+  }
 
   if (!boards) {
     return <PageLoadingSpinner caption='Loading Boards...' />
@@ -83,7 +91,7 @@ function Boards() {
             </Stack>
             <Divider sx={{ marginY: 1 }} />
             <Stack direction='column' spacing={1}>
-              <SidebarCreateBoardModal />
+              <SidebarCreateBoardModal afterAddBoard={afterAddBoard} />
             </Stack>
           </Grid>
 
