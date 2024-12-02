@@ -51,6 +51,8 @@ export const activeBoardSlice = createSlice({
     builder.addCase(fetchBoardDetailsAPI.fulfilled, (state, action) => {
       const board = action.payload
 
+      board.FE_allUsers = board.owners.concat(board.members)
+
       // Sắp xếp lại Columns trước khi sử dụng
       board.columns = mapOrder(board?.columns, board?.columnOrderIds, '_id')
       board.columns.forEach((column) => {
