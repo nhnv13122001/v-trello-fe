@@ -40,7 +40,9 @@ export const activeBoardSlice = createSlice({
       if (column) {
         const card = column.cards.find((c) => c._id === incomingCard._id)
         if (card) {
-          card.title = incomingCard.title
+          Object.keys(incomingCard).forEach((key) => {
+            card[key] = incomingCard[key]
+          })
         }
       }
     }

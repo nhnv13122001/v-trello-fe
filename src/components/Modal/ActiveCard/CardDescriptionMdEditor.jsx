@@ -6,34 +6,18 @@ import rehypeSanitize from 'rehype-sanitize'
 import { useColorScheme } from '@mui/material/styles'
 import EditNoteIcon from '@mui/icons-material/EditNote'
 
-const markdownValueExample = `
-  *\`Markdown Content Example:\`*
-
-  **Hello world | TrungQuanDev - Một Lập Trình Viên | Trello MERN Stack Advanced**
-  [![](https://avatars.githubusercontent.com/u/14128099?v=4&s=80)](https://avatars.githubusercontent.com/u/14128099?v=4)
-  \`\`\`javascript
-  import React from "react"
-  import ReactDOM from "react-dom"
-  import MDEditor from '@uiw/react-md-editor'
-  \`\`\`
-`
-/**
- * Vài ví dụ Markdown từ lib
- * https://codesandbox.io/embed/markdown-editor-for-react-izdd6?fontsize=14&hidenavigation=1&theme=dark
- */
-function CardDescriptionMdEditor() {
-  // Lấy giá trị 'dark', 'light' hoặc 'system' mode từ MUI để support phần Markdown bên dưới: data-color-mode={mode}
-  // https://www.npmjs.com/package/@uiw/react-md-editor#support-dark-modenight-mode
+function CardDescriptionMdEditor({
+  cardDescriptionProp,
+  handleUpdateCardDescription
+}) {
   const { mode } = useColorScheme()
-
-  // State xử lý chế độ Edit và chế độ View
   const [markdownEditMode, setMarkdownEditMode] = useState(false)
-  // State xử lý giá trị markdown khi chỉnh sửa
-  const [cardDescription, setCardDescription] = useState(markdownValueExample)
+  const [cardDescription, setCardDescription] = useState(cardDescriptionProp)
 
   const updateCardDescription = () => {
     setMarkdownEditMode(false)
-    console.log('cardDescription: ', cardDescription)
+
+    handleUpdateCardDescription(cardDescription)
   }
 
   return (
@@ -46,8 +30,7 @@ function CardDescriptionMdEditor() {
               onChange={setCardDescription}
               previewOptions={{ rehypePlugins: [[rehypeSanitize]] }} // https://www.npmjs.com/package/@uiw/react-md-editor#security
               height={400}
-              preview='edit' // Có 3 giá trị để set tùy nhu cầu ['edit', 'live', 'preview']
-              // hideToolbar={true}
+              preview='edit'
             />
           </Box>
           <Button

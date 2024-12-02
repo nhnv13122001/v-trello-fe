@@ -48,7 +48,7 @@ function AppBar() {
           </Tooltip>
         </Link>
 
-        <Link to='/'>
+        <Link to='/boards'>
           <Box
             sx={{
               display: 'flex',
