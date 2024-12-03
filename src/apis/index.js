@@ -102,3 +102,12 @@ export const updateCardDetailsAPI = async (cardId, updateData) => {
   )
   return response.data
 }
+
+export const inviteUserToBoard = async (data) => {
+  const response = await authorizedAxiosInstance.post(
+    `${API_ROOT}/v1/invitations/board/`,
+    data
+  )
+  toast.success('User invited to board successfully!')
+  return response.data
+}
