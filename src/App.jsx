@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux'
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom'
 
+import Boards from '~/pages/Boards'
 import Auth from '~/pages/Auth/Auth'
 import Board from '~/pages/Boards/_id'
 import NotFound from '~/pages/404/NotFound'
@@ -17,14 +18,10 @@ function App() {
   const currentUser = useSelector(selectCurrentUser)
   return (
     <Routes>
-      <Route
-        path='/'
-        element={
-          <Navigate to='/boards/6737fed60d600568968a2d68' replace={true} />
-        }
-      />
+      <Route path='/' element={<Navigate to='/boards' replace={true} />} />
 
       <Route element={<ProtectedRoute user={currentUser} />}>
+        <Route path='/boards' element={<Boards />} />
         <Route path='/boards/:boardId' element={<Board />} />
         <Route path='/settings/account' element={<Settings />} />
         <Route path='/settings/security' element={<Settings />} />

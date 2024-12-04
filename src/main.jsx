@@ -1,4 +1,5 @@
 import React from 'react'
+import { io } from 'socket.io-client'
 import { Provider } from 'react-redux'
 import ReactDOM from 'react-dom/client'
 import { persistStore } from 'redux-persist'
@@ -14,16 +15,19 @@ import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/s
 import App from '~/App.jsx'
 import theme from '~/theme'
 import { store } from '~/redux/store'
+import { API_ROOT } from './utils/constants'
 import { injectStore } from '~/utils/authorizeAxios'
 
 const persistor = persistStore(store)
 
 injectStore(store)
 
+export const socketIoInstance = io(API_ROOT)
+
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <BrowserRouter basename='/'>
-    <Provider store={store}>
-      <PersistGate persistor={persistor}>
+  <Provider store={store}>
+    <PersistGate persistor={persistor}>
+      <BrowserRouter basename='/'>
         <React.StrictMode>
           <CssVarsProvider theme={theme}>
             <ConfirmProvider>
@@ -40,7 +44,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             </ConfirmProvider>
           </CssVarsProvider>
         </React.StrictMode>
-      </PersistGate>
-    </Provider>
-  </BrowserRouter>
+      </BrowserRouter>
+    </PersistGate>
+  </Provider>
 )

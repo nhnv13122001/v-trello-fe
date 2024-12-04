@@ -4,7 +4,9 @@ import storage from 'redux-persist/lib/storage'
 import { configureStore } from '@reduxjs/toolkit'
 
 import userReducer from './user/userSlice'
+import activeCardReducer from './activeCard/activeCardSlice'
 import activeBoardReducer from './activeBoard/activeBoardSlice'
+import notificationsReducer from './notifications/notificationsSlice'
 
 const rootPersistConfig = {
   key: 'root',
@@ -13,8 +15,10 @@ const rootPersistConfig = {
 }
 
 const reducer = combineReducers({
+  user: userReducer,
+  activeCard: activeCardReducer,
   activeBoard: activeBoardReducer,
-  user: userReducer
+  notifications: notificationsReducer
 })
 
 const persistedReducer = persistReducer(rootPersistConfig, reducer)
