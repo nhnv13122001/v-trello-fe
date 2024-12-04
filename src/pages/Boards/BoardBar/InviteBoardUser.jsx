@@ -8,7 +8,7 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
 
-import { socketIoInstance } from '~/main'
+import { socketIoInstance } from '~/socketClient'
 import { inviteUserToBoard } from '~/apis'
 import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
 import {
