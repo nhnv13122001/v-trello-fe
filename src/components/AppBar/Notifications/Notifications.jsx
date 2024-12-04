@@ -16,7 +16,7 @@ import GroupAddIcon from '@mui/icons-material/GroupAdd'
 import NotInterestedIcon from '@mui/icons-material/NotInterested'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 
-import { socketIoInstance } from '~/main'
+import { socketIoInstance } from '~/socketClient'
 import { selectCurrentUser } from '~/redux/user/userSlice'
 import {
   addNotification,
