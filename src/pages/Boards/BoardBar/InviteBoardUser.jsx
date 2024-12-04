@@ -8,6 +8,7 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
 
+import { socketIoInstance } from '~/main'
 import { inviteUserToBoard } from '~/apis'
 import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
 import {
@@ -37,9 +38,10 @@ function InviteBoardUser({ boardId }) {
     inviteUserToBoard({
       inviteeEmail,
       boardId
-    }).then(() => {
+    }).then((invitation) => {
       setValue('inviteeEmail', null)
       setAnchorPopoverElement(null)
+      socketIoInstance.emit('FE_USER_INVITED_TO_BOARD', invitation)
     })
   }
 
